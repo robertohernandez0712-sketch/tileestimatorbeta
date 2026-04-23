@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tile Estimator V1 - Beta Local</title>
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+  <main class="app">
+    <h1>Tile Estimator V1 - Beta Local</h1>
+
+    <section class="card collapsible-module" id="business-section">
+  <div class="module-header">
+    <h2>Business Profile</h2>
+    <button class="module-toggle no-print" type="button" data-module-toggle="business-section">Collapse</button>
+  </div>
+
+  <div class="module-content">
+    <div class="grid">
+      <input id="businessName" type="text" placeholder="Business Name">
+      <input id="businessPhone" type="text" placeholder="Business Phone">
+      <input id="businessEmail" type="text" placeholder="Business Email">
+    </div>
+
+    <div class="info-panel">
+      <div class="info-panel-title">Business Logo</div>
+      <p class="helper-text">Use a small logo image for quote and invoice documents.</p>
+      <div class="actions">
+        <input id="businessLogoFile" type="file" accept="image/*">
+        <button id="removeBusinessLogoBtn" type="button">Remove Logo</button>
+      </div>
+      <div id="businessLogoPreview" class="business-logo-preview">No logo loaded.</div>
+    </div>
+
+    <div class="actions">
+      <button id="saveBusinessBtn" type="button">Save Business Profile</button>
+    </div>
+  </div>
+</section>
+
+    <section class="card collapsible-module" id="project-section">
+  <div class="module-header">
+    <h2>Project Info</h2>
+    <button class="module-toggle no-print" type="button" data-module-toggle="project-section">Collapse</button>
+  </div>
+
+  <div class="module-content">
+    <div class="grid">
+      <input id="projectName" type="text" placeholder="Project Name">
+      <input id="clientName" type="text" placeholder="Client Name">
+      <input id="clientPhone" type="text" placeholder="Client Phone">
+      <input id="jobAddress" type="text" placeholder="Job Address">
+    </div>
+
+    <div class="charges-block">
+      <label class="charge-row">
+        <input id="includeDemolition" type="checkbox">
+        <span>Include Demolition</span>
+      </label>
+      <input id="demolitionPrice" type="number" step="0.01" placeholder="Demolition Price">
+
+      <label class="charge-row">
+        <input id="includePlumbing" type="checkbox">
+        <span>Include Plumbing</span>
+      </label>
+      <input id="plumbingPrice" type="number" step="0.01" placeholder="Plumbing Price">
+    </div>
+
+    <div class="actions">
+      <button id="newProjectBtn" type="button">New Project</button>
+      <button id="saveProjectBtn" type="button">Save Project</button>
+      <button id="loadProjectBtn" type="button">Load Project</button>
+      <button id="deleteProjectBtn" type="button">Delete Project</button>
+      <button id="exportProjectBtn" type="button">Export Project JSON</button>
+      <button id="importProjectBtn" type="button">Import Project JSON</button>
+      <button id="recoverAutosaveBtn" type="button">Recover Autosave</button>
+      <input id="importProjectFile" type="file" accept="application/json,.json" class="no-print" hidden>
+      <span id="autosaveStatus" class="autosave-status">Autosave ready.</span>
+    </div>
+
+    <p class="helper-text">
+      Data Safety: Projects are saved locally in this browser/device. Export Project JSON after important estimates for backup or transfer.
+    </p>
+
+    <div class="grid">
+      <select id="savedProjectsSelect">
+        <option value="">Select saved project</option>
+      </select>
+    </div>
+
+    <div class="info-panel collapsible-module is-collapsed" id="project-backups-section">
+      <div class="module-header">
+        <div class="info-panel-title">Project Backups</div>
+        <button class="module-toggle no-print" type="button" data-module-toggle="project-backups-section">Expand</button>
+      </div>
+
+      <div class="module-content">
+        <p class="helper-text">Latest backups first. Automatic backups are created before saving, deleting, or restoring a project.</p>
+        <div class="grid">
+          <select id="projectBackupsSelect">
+            <option value="">Select backup</option>
+          </select>
+        </div>
+        <div class="actions">
+          <button id="restoreProjectBackupBtn" type="button">Restore Backup</button>
+          <button id="exportProjectBackupBtn" type="button">Export Backup JSON</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <textarea id="scopeOfWork" placeholder="Scope of Work"></textarea>
+      <textarea id="projectNotes" placeholder="Notes"></textarea>
+    </div>
+  </div>
+</section>
+
+    <section class="card" id="areas-section">
+      <h2>Areas</h2>
+
+      <div class="actions">
+  <button id="addShowerBtn" type="button">Add Shower</button>
+  <button id="addFloorBtn" type="button">Add Floor</button>
+  <button id="addBacksplashBtn" type="button">Add Backsplash</button>
+  <button id="addFireplaceBtn" type="button">Add Fireplace</button>
+  <button id="addStairsBtn" type="button">Add Stairs</button>
+</div>
+
+      <div id="areasContainer"></div>
+    </section>
+
+    <section class="card collapsible-module" id="summary-section">
+  <div class="module-header">
+    <h2>Summary</h2>
+    <button class="module-toggle no-print" type="button" data-module-toggle="summary-section">Collapse</button>
+  </div>
+
+  <div class="module-content">
+    <div id="summaryContainer">No project loaded.</div>
+  </div>
+</section>
+
+    <section class="card collapsible-module" id="materials-section">
+  <div class="module-header">
+    <h2>Materials Summary</h2>
+    <button class="module-toggle no-print" type="button" data-module-toggle="materials-section">Collapse</button>
+  </div>
+
+  <div class="module-content">
+    <div class="actions no-print">
+  <button id="printMaterialsBtn" type="button">Print Materials / Save as PDF</button>
+  <button id="exportMaterialsCsvBtn" type="button">Export Materials CSV</button>
+</div>
+
+    <div id="materialsSummaryContainer">No materials calculated yet.</div>
+  </div>
+</section>
+
+<section class="card collapsible-module" id="tools-section">
+  <div class="module-header">
+    <h2>Tools</h2>
+    <button class="module-toggle no-print" type="button" data-module-toggle="tools-section">Collapse</button>
+  </div>
+
+  <div class="module-content">
+    <div class="info-panel collapsible-module is-collapsed" id="evidence-log-section">
+      <div class="module-header">
+        <div class="info-panel-title">Evidence Log</div>
+        <button class="module-toggle no-print" type="button" data-module-toggle="evidence-log-section">Expand</button>
+      </div>
+
+      <div class="module-content">
+        <div class="actions">
+          <button id="addEvidenceBtn" type="button">Add Evidence</button>
+          <button id="printEvidenceReportBtn" type="button">Print Evidence Report / Save as PDF</button>
+        </div>
+
+        <div id="evidenceLogContainer">
+          No evidence added yet.
+        </div>
+
+        <div id="evidenceReportContainer">
+          No evidence report generated yet.
+        </div>
+      </div>
+    </div>
+
+    <div class="info-panel collapsible-module" id="grout-tool-section">
+      <div class="module-header">
+        <div class="info-panel-title">Grout Calculator</div>
+        <button class="module-toggle no-print" type="button" data-module-toggle="grout-tool-section">Collapse</button>
+      </div>
+
+      <div class="module-content">
+        <div id="groutCalculatorContainer">
+          No grout calculation yet.
+        </div>
+      </div>
+    </div>
+
+    <div class="info-panel collapsible-module" id="layout-tool-section">
+      <div class="module-header">
+        <div class="info-panel-title">Layout Calculator</div>
+        <button class="module-toggle no-print" type="button" data-module-toggle="layout-tool-section">Collapse</button>
+      </div>
+
+      <div class="module-content">
+        <div id="layoutCalculatorContainer">
+          No layout calculation yet.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="card collapsible-module" id="invoice-section">
+  <div class="module-header">
+    <h2>Invoice</h2>
+    <button class="module-toggle no-print" type="button" data-module-toggle="invoice-section">Collapse</button>
+  </div>
+
+  <div class="module-content">
+    <div class="actions no-print">
+      <button id="printInvoiceBtn" type="button">Print Invoice / Save as PDF</button>
+    </div>
+
+    <div id="invoiceSettingsContainer">No invoice loaded.</div>
+    <div id="invoicePreviewContainer">No invoice generated yet.</div>
+  </div>
+</section>
+
+    <section class="card collapsible-module" id="quote-section">
+  <div class="module-header">
+    <h2>Quote Preview</h2>
+    <button class="module-toggle no-print" type="button" data-module-toggle="quote-section">Collapse</button>
+  </div>
+
+  <div class="module-content">
+    <div class="actions no-print">
+      <button id="printQuoteBtn" type="button">Print / Save as PDF</button>
+    </div>
+
+    <div class="info-panel no-print">
+      <div class="info-panel-title">Quote PDF Fit</div>
+      <p class="helper-text">Reduce the quote size when a large project barely spills into another page.</p>
+      <label class="range-row">
+        <span>Quote Size</span>
+        <input id="quotePrintScale" type="range" min="75" max="100" step="1" value="100">
+        <strong id="quotePrintScaleLabel">100%</strong>
+      </label>
+    </div>
+
+    <div id="quotePreviewContainer">No quote generated yet.</div>
+  </div>
+</section>
+  </main>
+
+  <script src="./js/models.js"></script>
+<script src="./js/state.js"></script>
+<script src="./js/storage.js"></script>
+<script src="./js/materials.js"></script>
+<script src="./js/app.js"></script>
+</body>
+</html>
